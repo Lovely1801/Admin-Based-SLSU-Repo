@@ -16,16 +16,21 @@ if(!isset($_SESSION['user_id'])){
     <?php include 'header.php';?>
     <style>
         .main-content{
-            height: 500px;
+            height: auto;
             border: #dfdfdf solid 1px;
-            border-radius: 10px;
+            border-radius: 2px;
             background: #ffffff;
         }
-        /* .top-content{
-            height: 100px;
-            border-radius: 10px;
+        .top-content{
+            height: 170px;
+            border-radius: 2px;
             background: #ffffff;
-        } */
+        }
+        .most-dl-content{
+            height: 170px;
+            border-radius: 2px;
+            background: #ffffff;
+        }
         /* .category{
             border-radius: 10px;
             background: #ffffff;
@@ -55,6 +60,11 @@ if(!isset($_SESSION['user_id'])){
             border: none;
             color: blue;
         }
+
+        .carousel-box{
+            width: auto;
+        }
+        
     </style>
 </head>
 <body>
@@ -64,7 +74,7 @@ if(!isset($_SESSION['user_id'])){
             <div class="row px-4">
                 <div class="main-content col-8 pb-5">
                     <div class='card-header'>
-                        <h3 class="card-title">Recent Documents</h3>
+                        <h3 class="card-title"><strong>Recent Documents</strong></h3>
                         <div class="card-tools">
                             <div class="input-group input-group-sm" style="width: 150px;">
                                 <input type="text" name="table_search" id='searchFile' class="form-control float-right" placeholder="Search">
@@ -77,60 +87,63 @@ if(!isset($_SESSION['user_id'])){
                         </div>
                     </div>
                     <div class="card-body table-responsive p-0" style='height: 420px'>
-                            <table class='table table-thead table-striped'>
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Date</th>
-                                        <th>Total Downloads</th>
-                                        <th>Total Like</th>
-                                        <th>Rating</th>
-                                        <th>Thumbs Up</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                    <?php
-                                    include 'user_class.php';
-    
-                                    $action = new User();
-                                    $file = $action->getAllDocument();
-                                    foreach($file as $data){
-                                    ?>
-                                    <tr>
-                                        <td><?= $data['file_name']?></td>
-                                        <td><?= date("F j, Y g:i A", strtotime($data['date']))?></td>
-                                        <td><?= $data['download_count'] ?></td>
-                                        <td><?= $action->countlike($data['id']) ?></td>
-                                        <td><?= $action->getRate($data['id']) ?></td>
-                                        <td> <?php if($action->getLikeVal($data['id']) == true){?>
-                                            <form action="like.php" method='post'>
-                                                <input type="hidden" name="file_id" value="<?= $data['id']?>">
-                                                <button class='like-normal like-liked' name='toggle_like'><i class="fa fa-regular fa-thumbs-up"></i></button>
-                                            </form>
-                                            <?php }else {?>
-                                            <form action="like.php" method='post'>
-                                                <input type="hidden" name="file_id" value="<?= $data['id']?>">
-                                                <button class='like-normal' name='toggle_like'><i class="fa fa-regular fa-thumbs-up"></i></button>
-                                            </form>
-                                            <?php }?>
-                                        </td>
-                                        <td class='d-flex'>
-                                            <button class='dl-button' onclick="window.location.href='download.php?file=<?= $data['id'] ?>'"><i class="fa fa-solid fa-download"></i></button>&nbsp;
-                                            <button class='btn btn-primary' onclick="window.location.href='rate.php?file=<?= $data['id'] ?>'">Rate</button>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                        <table class='table table-thead table-striped'>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Total Downloads</th>
+                                    <th>Total Like</th>
+                                    <th>Rating</th>
+                                    <th>Thumbs Up</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="top-content mb-3">
+                                <p class='ps-3 pt-2'><strong>Top Rated Topics</strong></p>
+                                <div class="carousel slide" data-bs-ride='carousel' data-bs-interval="8000">
+                                    <div id='most-rated' class="carousel-inner">
+                                        <!-- The data are fetch in ajax -->
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#most-rated" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#most-rated" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="most-dl-content mb-3">
+                                <p class='ps-3 pt-2'><strong>Most Downloaded</strong></p>
+                                <div class="carousel slide" data-bs-ride='carousel' data-bs-interval="8000">
+                                    <div id='most-dl' class="carousel-inner">
+                                        <!-- The data are fetch in ajax -->
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#most-dl" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#most-dl" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-4">
-                    <div class="top-content mb-3">
-                        Top Research
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
@@ -152,8 +165,107 @@ if(!isset($_SESSION['user_id'])){
                     }
                 });
             });
-        });
 
+            //Load the recent file content using ajax
+            function loadFile(){
+                $.ajax({
+                    type: 'GET',
+                    url: 'user_ajax.php',
+                    data: { loadBody: 'getData'},
+                    success: function(response){
+                        $('#tableBody').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(status + ': ' + error);
+                    }
+                });
+            }
+            loadFile();
+
+            $('#tableBody').on('click','.like-normal',function(){
+                const data = $(this).attr('data-id');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: 'user_ajax.php',
+                    data: { file_id : data},
+                    success: function(response){
+                        var parsedResponse = JSON.parse(response);
+                        $('td.like-count[data-id="'+data+'"]').text(parsedResponse.like_count);
+                        if(parsedResponse.bool_like == true){
+                            $('button.like-normal[data-id="'+data+'"]').addClass('like-liked');
+                        }else{
+                            $('button.like-normal[data-id="'+data+'"]').removeClass('like-liked');
+                        }
+                    }
+                    
+                });
+            });
+
+            //lod the top rated file content
+            function loadTopRatedFile(){
+                $.ajax({
+                    type: 'GET',
+                    url: 'user_ajax.php',
+                    data: {mostRate : 'getRate'},
+                    dataType: 'json',
+                    success: function(response){
+                        var topRateFile = '';
+                        response.forEach(function(item, index){
+                            if(index === 0){ // Check if it's the first item
+                                topRateFile += '<div class="carousel-item text-center active">';
+                                topRateFile += '<div class="carousel-box container-sm border rated-content">';
+                                topRateFile += '<h5>'+ item.file_name + '</h5>'; 
+                                topRateFile += '<p>'+ item.avg_rating + '</p>'; 
+                                topRateFile += '</div>';
+                                topRateFile += '</div>';
+                            } else {
+                                topRateFile += '<div class="carousel-item text-center">';
+                                topRateFile += '<div class="carousel-box container-sm border rated-content">';
+                                topRateFile += '<h5>'+ item.file_name + '</h5>'; 
+                                topRateFile += '<p>'+ item.avg_rating + '</p>'; 
+                                topRateFile += '</div>';
+                                topRateFile += '</div>';
+                            }
+                        });
+                        $('#most-rated').html(topRateFile);
+                    }
+                });
+            }
+            loadTopRatedFile();
+
+            //load the top download file content
+            function loadTopDLFile(){
+                $.ajax({
+                    type: 'GET',
+                    url: 'user_ajax.php',
+                    data: {mostDl : 'getDl'},
+                    dataType: 'json',
+                    success: function(response){
+                        var topFileDl = '';
+                        response.forEach(function(item, index){
+                            if(index === 0){ // Check if it's the first item
+                                topFileDl += '<div class="carousel-item text-center active">';
+                                topFileDl += '<div class="carousel-box container-sm border rated-content">';
+                                topFileDl += '<h5>'+ item.file_name + '</h5>'; 
+                                topFileDl += '<p>'+ item.download_count + '</p>'; 
+                                topFileDl += '</div>';
+                                topFileDl += '</div>';
+                            } else {
+                                topFileDl += '<div class="carousel-item text-center">';
+                                topFileDl += '<div class="carousel-box container-sm border rated-content">';
+                                topFileDl += '<h5>'+ item.file_name + '</h5>'; 
+                                topFileDl += '<p>'+ item.download_count + '</p>'; 
+                                topFileDl += '</div>';
+                                topFileDl += '</div>';
+                            }
+                        });
+                        $('#most-dl').html(topFileDl);
+                    }
+                });
+            }
+            loadTopDLFile();
+        });
     </script>
 </body>
 </html>

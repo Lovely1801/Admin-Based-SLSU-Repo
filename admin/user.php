@@ -62,8 +62,8 @@ if(isset($_GET['id'])){
             <hr>
             <!-- Main content -->
             <div class="content">
-            <div class="container-fluid">
-                <button class="mb-3 btn bg-primary align-items-center" data-toggle="modal" data-target="#registrationModal">
+            <div class="container">
+                <button class="mb-3 btn bg-primary btn-sm align-items-center" data-toggle="modal" data-target="#registrationModal">
                     <span class="info-box-text">Add User</span>
                 </button>
                     <div class="row">
@@ -122,7 +122,7 @@ if(isset($_GET['id'])){
                     </div>
 
                     
-                    <div class="col-12">
+                    <div class="col-12 px-0">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">User Table</h3>

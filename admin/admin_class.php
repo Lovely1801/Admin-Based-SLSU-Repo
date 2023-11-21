@@ -228,7 +228,7 @@ class Admin{
     function getAllDocument(){
         $data = array();
 
-        $sql = "SELECT * FROM uploaded_files";
+        $sql = "SELECT * FROM uploaded_files ORDER BY date desc";
         $result = $this->db->query($sql);
         if($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
@@ -290,6 +290,7 @@ class Admin{
             header('Content-Disposition: attachment; filename="' . basename($path.$qry) . '"');
             header('Content-Length: ' . filesize($path.$qry));
             if(readfile($path.$qry)){
+            $sql = $this->db->query("INSERT INTO `download` (download,user_id,file_id) VALUES(1,'$data','$id')");
             $sql = $this->db->query("UPDATE `uploaded_files` SET `download_count` = download_count + 1 WHERE id = $id");
             $qry2 = $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES ('$name is downloading $file_name','$data')");
             }
@@ -388,13 +389,12 @@ class Admin{
         }
     }
 
-    function getAdminLogs(){
-        $admin_id = $_SESSION['admin_id'];
-        $admin = $this->db->query("SELECT * FROM info WHERE id_num = '$admin_id'")->fetch_array()['id'];
+    function getAdminLogs($admin_id){
+        $admin = $this->db->query("SELECT id FROM info WHERE id_num = '$admin_id'")->fetch_assoc();
 
         $data = array();
 
-        $qry = $this->db->query("SELECT * From activity_logs WHERE user_id = '$admin' ORDER BY date DESC");
+        $qry = $this->db->query("SELECT activity_logs.logs, activity_logs.date,  info.name From activity_logs INNER JOIN info ON activity_logs.user_id = info.id ORDER BY date DESC");
         if($qry->num_rows > 0){
             while($rows = $qry->fetch_assoc()){
                 $data[] = $data;
@@ -422,6 +422,46 @@ class Admin{
         if($qry->num_rows > 0){
             while($rows = $qry->fetch_assoc()){
                 $data[] = $rows;
+            }
+        }
+        return $data;
+    }
+
+    function totalDownloads(){
+        $data;
+
+        $qry = $this->db->query("SELECT download_count FROM uploaded_files");
+        if($qry->num_rows > 0){
+            while($rows = $qry->fetch_assoc()){
+                $data += $rows['download_count'];
+            }
+        }
+        return $data;
+    }
+    
+    function totalLikes(){
+        $data = array();
+    
+        $likes = $this->db->query("SELECT liked FROM Likes");
+        if($likes->num_rows > 0){
+            while($rows = $likes->fetch_assoc()){
+                if($rows['liked'] == 1){
+                    $data[] = $rows;
+                }
+            }
+        }
+    
+        return $data;
+
+    }
+
+    function dlChart(){
+        $data = array();
+        $qry = $this->db->query("SELECT DATE(date) AS download_date, SUM(download) AS total_downloads FROM download GROUP BY DATE(date) ORDER BY DATE(date) DESC
+        ");
+        if($qry->num_rows > 0){
+            while($row = $qry->fetch_assoc()){
+                $data[] = $row;
             }
         }
         return $data;

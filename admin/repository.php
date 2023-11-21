@@ -51,8 +51,8 @@ if(!isset($_SESSION['admin_id'])){
             <hr>
             <!-- Main content -->
             <div class="content">
-                <div class="container-fluid">
-                    <button class="mb-3 btn bg-primary align-items-center" onclick="window.location.href='upload.php'">
+                <div class="container">
+                    <button class="mb-3 btn bg-primary btn-sm align-items-center" onclick="window.location.href='upload.php'">
                     <span class="info-box-text">Upload File</span>
                     </button>
                     <div class="row">
@@ -126,15 +126,10 @@ if(!isset($_SESSION['admin_id'])){
                 </div>
             </div>
         </div>
+        <?php include 'footer.php';?>
     </div>
-    <?php include 'footer.php';?>
 
     <script>
-        function Like(id){
-            const like = document.getElementById("toggle-like");
-            like.classList.toggle("like-liked");
-        }
-
         $(document).ready(function() {
             // Add an input event listener to the search input field
             $('#searchFile').on('input', function() {

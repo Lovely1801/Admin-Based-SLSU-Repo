@@ -36,6 +36,7 @@ if(isset($_GET['id'])){
 <body>
     <div class="wrapper">
         <?php include 'topbar.php';?>
+        <?php include 'sidebar.php';?>
         <div class="content-wrapper">
             <div class="content-header">
                 <div class="container-fluid">

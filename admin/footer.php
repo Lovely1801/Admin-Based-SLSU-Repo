@@ -1,5 +1,5 @@
 <footer class="main-footer">
-            <strong>Copyright &copy; 2023 <a href="#">Sad Group</a>.</strong>
+            <strong><a href="#">@</a>Copyright: SLSU Repository System &copy; 2023-2024 <a href="#">Group 6</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
             <b>Version</b> 1.0.0

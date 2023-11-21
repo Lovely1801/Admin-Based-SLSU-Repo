@@ -67,6 +67,7 @@ class User{
             header('Content-Disposition: attachment; filename="' . basename($path.$qry) . '"');
             header('Content-Length: ' . filesize($path.$qry));
             if(readfile($path.$qry)){
+               $sql = $this->db->query("INSERT INTO `download` (download,user_id,file_id) VALUES(1,'$data','$id')");
                $sql = $this->db->query("UPDATE `uploaded_files` SET `download_count` = download_count + 1 WHERE id = $id");
                $qry2 = $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES ('$name is downloading $file_name','$data')");
             }
@@ -138,24 +139,19 @@ class User{
         
         $sql ="SELECT * FROM uploaded_files WHERE CONCAT('',file_name,download_count,DATE_FORMAT(date, '%M %d, %Y %h:%i %p')) LIKE CONCAT('%','$search', '%') ORDER BY date DESC";
         $result = $this->db->query($sql);
+        
         if($result->num_rows > 0){
             while($file = $result->fetch_assoc()){
                 echo '<tr>';
                 echo '<td>' . $file['file_name'] . '</td>';
                 echo '<td>' . date("F j, Y g:i A", strtotime($file['date'])) . '</td>';
                 echo '<td>' . $file['download_count'] . '</td>';
-                echo '<td>'. $action->countLike($file['id']) .'</td>';
+                echo '<td class="like-count" data-id='. $file['id'] .'>'. $action->countLike($file['id']) .'</td>';
                 echo '<td>'. $action->getRate($file['id']) .'</td>'; ?>
                     <td> <?php if($action->getLikeVal($file['id']) == true){?>
-                        <form action="like.php" method='post'>
-                            <input type="hidden" name="file_id" value="<?= $file['id']?>">
-                            <button class='like-normal like-liked' name='toggle_like'><i class="fa fa-regular fa-thumbs-up"></i></button>
-                        </form>
+                            <button class='like-normal like-liked' data-id="<?= $file['id']?>"><i class="fa fa-regular fa-thumbs-up"></i></button>
                         <?php }else {?>
-                        <form action="like.php" method='post'>
-                            <input type="hidden" name="file_id" value="<?= $file['id']?>">
-                            <button class='like-normal' name='toggle_like'><i class="fa fa-regular fa-thumbs-up"></i></button>
-                        </form>
+                            <button class='like-normal' data-id="<?= $file['id']?>"><i class="fa fa-regular fa-thumbs-up"></i></button>
                     </td>
                     <?php }
                 echo '<td class="d-flex">
@@ -199,6 +195,67 @@ class User{
         if($qry->num_rows > 0){
             while($row = $qry->fetch_assoc()){
                 $data[] = $row;
+            }
+        }
+        return $data;
+    }
+
+    function like($file_id){
+        session_start();
+        $user_id = $_SESSION['user_id'];
+
+        $qry = $this->db->query("SELECT id, name FROM info WHERE id_num = '$user_id'")->fetch_assoc();
+        $data = $qry['id'];
+        $name = $qry['name'];
+
+        $qry = "SELECT file_name FROM uploaded_files WHERE id = '$file_id'";
+        $res = $this->db->query($qry);
+        $row = $res->fetch_assoc();
+        $file_name = $row['file_name'];
+
+        $qry_like = $this->db->query("SELECT * FROM Likes WHERE file_id = '$file_id' AND user_id = '$data'");
+        if($qry_like->num_rows > 0){
+            $row = $qry_like->fetch_assoc();
+            $liked = $row['liked'];
+            $new_like_state = $liked ? 0 : 1;
+            $query = "UPDATE Likes SET liked = $new_like_state WHERE file_id = $file_id AND user_id = '$data'";
+            if($this->db->query($query)){
+                $requery = $this->db->query("SELECT liked FROM Likes WHERE user_id = '$data' and file_id = '$file_id' ");
+                $like_row = $requery->fetch_assoc();
+                if($like_row['liked'] == 1){
+                    $qry = $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES ('".$name." liked the file ".$file_name."','$data')");
+                }else{
+                    $qry = $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES ('".$name." unliked the file ".$file_name."','$data')");
+                }
+            }
+        }else{
+            $qry = $this->db->query("INSERT INTO Likes (file_id , user_id, liked) VALUES('$file_id','$data','1')");
+            if($qry){
+                $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES ('".$name." liked the file ".$file_name."','$data')");
+            }
+        }
+
+    }
+
+    function topDownload(){
+        $data = array();
+
+        $qry = $this->db->query("SELECT file_name ,download_count FROM `uploaded_files` WHERE date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() ORDER BY download_count DESC LIMIT 3");
+        if($qry->num_rows > 0){
+            while($rows = $qry->fetch_assoc()){
+                $data[] = $rows;
+            }
+        }
+        return $data;
+    }
+
+    function topRated(){
+        $data = array();
+
+        $qry = $this->db->query("SELECT rating.file_id, uploaded_files.file_name, FORMAT(AVG(rate),1) AS avg_rating FROM rating INNER JOIN uploaded_files ON rating.file_id = uploaded_files.id GROUP BY rating.file_id ORDER BY avg_rating DESC LIMIT 3");
+        if($qry->num_rows > 0){
+            while($rows = $qry->fetch_assoc()){
+                $data[] = $rows;
             }
         }
         return $data;
