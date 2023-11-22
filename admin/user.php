@@ -168,7 +168,7 @@ if(isset($_GET['id'])){
                                     <td><?= $user['status']?></td>
                                     <td><?= date("F j, Y g:i A", strtotime($user['date']))?></td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm" onclick="window.location.href='updateData.php?id=<?= $user['id']?>';">Update</button>
+                                        <button class="view_info btn btn-primary btn-sm" data-toggle='modal' data-target='#viewData' data-id='<?= $user['id']?>'>View</button>
                                         <button class="btn btn-danger btn-sm" onclick="window.location.href='user.php?id=<?= $user['id']?>'">Delete</button>
                                     </td>
                                     </tr>
@@ -176,7 +176,21 @@ if(isset($_GET['id'])){
                             </tbody>
                             </table>
                         </div>
-                        <!-- /.card-body -->
+                        <!-- Load modal -->
+                            <div class="modal fade" id="viewData">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">User</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id='modal-data'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -202,7 +216,155 @@ if(isset($_GET['id'])){
                     }
                 });
             });
+            
+            $('.view_info').click(function(){
+                const data = $(this).data('id');
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'jquery_admin.php',
+                    data: { data_id: data },
+                    success: function (response) {
+                        var info_data = JSON.parse(response);
+                        console.log(info_data);
+                        var load_data = '';
+                        var userLogs = '';
+                        
+
+                        info_data.logs.forEach(function(items) {
+                            userLogs += '<tr>';
+                            userLogs += '<td>' + items.logs + '</td>'; // Close the <td> tags
+                            // Format the date
+                            const formattedDate = new Date(items.date);
+                            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+                            const formattedDateString = formattedDate.toLocaleDateString(undefined, options);
+                            userLogs += '<td>' + formattedDateString + '</td>'; // Close the <td> tags
+                            userLogs += '</tr>';
+                        });
+                        load_data += '<div class="card">' +
+                                    '<div class="card-header d-flex">' +
+                                    '<ul class="nav nav-pills">' +
+                                    '<li class="nav-item"><a href="#profile" class="nav-link active" data-toggle="tab">Profile</a></li>' +
+                                    '<li class="nav-item"><a href="#logs" class="nav-link" data-toggle="tab">Logs</a></li>' +
+                                    '</ul>' +
+                                    '<button data-toggle="modal" data-target="#edit_info">Edit</button>'
+                                    '</div>' +
+                                    '<div class="card-body">' +
+                                    '<div class="tab-content">' +
+                                    '<div class="tab-pane active" id="profile">' +
+                                    '<div class="row">' +
+                                    '<div class="col-12 col-md-4">' +
+                                    '<div class="card card-primary card-outline">' +
+                                    '<div class="card-body box-profile">' +
+                                    '<div class="text-center">' +
+                                    '<div>'+
+                                    '<img class="profile-user-img img-fluid img-circle" id="userImage" src="' + (info_data.data[0].image_path ? info_data[0].image_path : '../assets/profile/default.png') + '" alt="User profile picture">' +
+                                    '<form id="imageUploadForm" enctype="multipart/form-data">'+
+                                    '<input type="file" id="fileInput" accept="image/*" name="image" style="display: none;">' +
+                                    '<input type="hidden" id="userId" name="data_id" value="'+info_data.data[0].user_id+'" >' +
+                                    '<button class="btn btn-primary btn-sm mt-2" onclick="uploadImage()">Upload Image</button>'+
+                                    '</form>'+
+                                    '</div>'+
+                                    '</div>' +
+                                    '<input type="hidden" id="person_id" data-id="'+info_data.data[0].user_id+'" >' +
+                                    '<h3 class="profile-username text-center">' + info_data.data[0].name + '</h3>' +
+                                    '<p class="text-muted text-center">'+info_data.data[0].email+'</p>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class="col-12 col-md-8">' +
+                                    '<div class="card">'+
+                                    '<div class="card-header">'+
+                                    '<h4>Information</h4>'+
+                                    '</div>'+
+                                    '<div class="card-body">'+
+                                    '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>'+
+                                    '<p><span>Phone Number: </span><strong>'+info_data.data[0].phoneNumber+'</strong></p>'+
+                                    '<p><span>Course: </span><strong>'+info_data.data[0].course+'</strong></p>'+
+                                    '<p><span>Year Level: </span><strong>'+info_data.data[0].yr_level+'</strong></p>'+
+                                    '</div>'+
+                                    '</div>'+
+                                    '</div>' +
+                                    '<div class="card">'+
+                                    '<div class="card-header">'+
+                                    '<h4>Information</h4>'+
+                                    '</div>'+
+                                    '<div class="card-body">'+
+                                    '<p><span></span><strong>'+info_data.data[0].about+'</strong></p>'+
+                                    '</div>'+
+                                    '</div>'+
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class="tab-pane" id="logs">' +
+                                    '<table class="table table-responsive table-default" style="height: 200px">'+
+                                    '<thead>'+
+                                    '<tr>'+
+                                    '<td>Logs</td>'+
+                                    '<td>Date</td>'+
+                                    '</tr>'+
+                                    '</thead>'+
+                                    '<tbody>'+
+                                    '<div class="card">'+ userLogs +
+                                    '</div>'+
+                                    '</tbody>'+
+                                    '</table>'+
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>';
+
+                        $('#modal-data').html(load_data);
+                    }
+                });
+            });
+
+            $(document).on('click', '#userImage', function() {
+                $('#fileInput').click();
+            });
+
+            $(document).on('change', '#fileInput', function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#userImage').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(file);
+            });
         });
+        function uploadImage() {
+            const formData = new FormData(document.getElementById('imageUploadForm'));
+            // const imageData = $('#userImage').attr('src');
+            // const userId = $('#userId');
+            // const user_id = userId.attr('data-id');
+
+            // Send imageData to PHP for database update via AJAX
+
+            console.log(user_id);
+            $.ajax({
+                type: 'POST',
+                url: 'jquery_admin.php',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    // Handle success (if needed)
+                    console.log(response);
+                    toastr.success('Upload Profile Picture Successfully.');
+                },
+                error: function() {
+                    // Handle error (if needed)
+                    $(document).Toasts('create', {
+                        class: 'bg-warning',
+                        title: 'Toast Title',
+                        subtitle: 'Subtitle',
+                        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                    })
+                }
+            });
+        }
     </script>
 </body>
 </html>

@@ -76,7 +76,7 @@ if(!isset($_SESSION['admin_id'])){
                                 </div>
                                     <!-- /.card-header -->
                                 <div class="card-body table-responsive p-0" style="height: 300px;">
-                                    <table class="table table-head-fixed text-nowrap">
+                                    <table id='repotable' class="table table-head-fixed text-nowrap">
                                         <thead>
                                             <tr>
                                             <th>File Name</th>
@@ -130,6 +130,11 @@ if(!isset($_SESSION['admin_id'])){
     </div>
 
     <script>
+        // $(function () {
+        //     $("#repotable").DataTable({
+        //     "responsive": true, "lengthChange": false, "autoWidth": false,
+        //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        // });
         $(document).ready(function() {
             // Add an input event listener to the search input field
             $('#searchFile').on('input', function() {

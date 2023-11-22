@@ -58,7 +58,7 @@ class Admin{
     //This function retrieve specific data in the database
     function getUser($id){
         $data = array();
-        $sql ="SELECT * FROM info WHERE id = $id";
+        $sql ="SELECT info.*, profile.* FROM info INNER JOIN profile On info.id = profile.user_id  WHERE info.id = $id";
         $result = $this->db->query($sql);
         if($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
@@ -389,25 +389,10 @@ class Admin{
         }
     }
 
-    function getAdminLogs($admin_id){
-        $admin = $this->db->query("SELECT id FROM info WHERE id_num = '$admin_id'")->fetch_assoc();
-
-        $data = array();
-
-        $qry = $this->db->query("SELECT activity_logs.logs, activity_logs.date,  info.name From activity_logs INNER JOIN info ON activity_logs.user_id = info.id ORDER BY date DESC");
-        if($qry->num_rows > 0){
-            while($rows = $qry->fetch_assoc()){
-                $data[] = $data;
-            }
-        }
-        return $data;
-    }
     function getUserLogs($user){
-        $user = $this->db->query("SELECT * FROM info WHERE id_num = '$user'")->fetch_array()['id'];
-
         $data = array();
 
-        $qry = $this->db->query("SELECT * From activity_logs WHERE user_id = '$admin' ORDER BY date DESC");
+        $qry = $this->db->query("SELECT * From activity_logs WHERE user_id = '$user' ORDER BY date DESC");
         if($qry->num_rows > 0){
             while($rows = $qry->fetch_assoc()){
                 $data[] = $rows;
@@ -465,6 +450,14 @@ class Admin{
             }
         }
         return $data;
+    }
+
+    function updateProfImage($baseimg, $user_id){
+        $sql = $this->db->query("UPDATE profile SET image_path='$baseimg' WHERE user_id = $user_id");
+
+        if($sql){
+            return 1;
+        }
     }
 
 }

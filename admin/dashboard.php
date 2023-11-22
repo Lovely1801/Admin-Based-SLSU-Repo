@@ -55,46 +55,96 @@ $countDownload = $action->totalDownloads();
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-3">
                             <div class="info-box">
-                                <div class="header border-0">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Users</span>
-                                        <span class="info-box-number"><?= $countUser ?></span>
-                                    </div>
+                                <span class="info-box-icon"><i class='far fa-regular fa-user'></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Users</span>
+                                    <span class="info-box-number"><?= $countUser ?></span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <div class="header border-0">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Files</span>
-                                        <span class="info-box-number"><?= $countFile ?></span>
-                                    </div>
+                            <div class="info-box bg-warning">
+                                <span class="info-box-icon"><i class='far fa-regular fa-file'></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Files</span>
+                                    <span class="info-box-number"><?= $countFile ?></span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <div class="header border-0">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Total Downloads</span>
-                                        <span class="info-box-number"><?= $countDownload ?></span>
-                                    </div>
+                            <div class="info-box bg-info">
+                                <span class="info-box-icon"><i class='fa fa-regular fa-download'></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Downloads</span>
+                                    <span class="info-box-number"><?= $countDownload ?></span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <div class="header border-0">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Total Likes</span>
-                                        <span class="info-box-number"><?= $countLike ?></span>
+                            <div class="info-box bg-gradient-success">
+                                <span class="info-box-icon"><i class='far fa-thumbs-up'></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Likes</span>
+                                    <span class="info-box-number"><?= $countLike ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 mt-2">
+                            <div class="card card-dark">
+                                <div class="card-header">
+                                    <h3 class="card-title">Download Graph</h3>
+
+                                    <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                    <div class="chart">
+                                        <canvas id="downloadsChart"></canvas>  
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 mt-2">
-                            <canvas id="downloadsChart"></canvas>  
+                        <div class="col-12 col-sm-4 col-md-3 mt-2">
+                            <div class="card card-dark">
+                                <div class="card-header">
+                                    <h3 class='card-title'>Recent Upload</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-3 mt-2">
+                            <div class="card card-dark">
+                                <div class="card-header">
+                                    <h3 class='card-title'>Recent Upload</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -147,7 +197,7 @@ $countDownload = $action->totalDownloads();
             const canvas = document.getElementById('downloadsChart');
             const parentWidth = canvas.parentElement.clientWidth;
 
-            canvas.style.height = '300px'; // Set initial height
+            canvas.style.height = '200px'; // Set initial height
             canvas.style.width = parentWidth + 'px';
         }
 
