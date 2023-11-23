@@ -80,13 +80,12 @@ class Admin{
         $sql = $this->db->query("INSERT INTO info (id_num,name,email,phoneNumber,status,password) VALUES ('$idNum','$name','$email','$phoneNumber','$status','$password')");
         $fetch = $this->db->query("SELECT id, name FROM info WHERE id_num = '$idNum'")->fetch_assoc();
         $id_num = $fetch['id'];
-        $sql2 = $this->db->query("INSERT INTO `profile`(`user_id`) VALUES ('$id_num')");
-        if ($sql && $sql2) {
-            $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is adding new user','$admin_id')");
-            return true;
-        } else {
-            return false;
-        }
+        $sql2 = $this->db->query("INSERT INTO `profile`(`user_id`,`yr_level`,`course`,`about`,`image_path`) VALUES ('$id_num','','','','')");
+        return $sql;
+        // if ($sql && $sql2) {
+        //     $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is adding new user','$admin_id')");
+        //     return true;
+        // }
     }
     
     //This function is use to update specific data base on the condition
