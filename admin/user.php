@@ -262,18 +262,43 @@ $user = new Admin();
                         console.log(info_data);
                         var load_data = '';
                         var userLogs = '';
+                        var infoButton = '';
+                        var info = '';
                         
+                        //Comparing the status of the user for the button
+                        if(info_data.data[0].status === 'admin'){
+                            infoButton += '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateAdminData.php?id='+info_data.data[0].user_id+'\'">Edit</button>';
+                        }else{
+                            infoButton += '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateData.php?id='+info_data.data[0].user_id+'\'">Edit</button>';
+                        }
+                        //Comparing the status of the user for the info
+                        if(info_data.data[0].status === 'admin'){
+                            info += '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>';
+                            info += '<p><span>Phone Number: </span><strong>'+info_data.data[0].phoneNumber+'</strong></p>';
+                        }else{
+                            info += '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>';
+                            info += '<p><span>Phone Number: </span><strong>'+info_data.data[0].phoneNumber+'</strong></p>';
+                            info += '<p><span>Course: </span><strong>'+info_data.data[0].course+'</strong></p>';
+                            info += '<p><span>Year Level: </span><strong>'+info_data.data[0].yr_level+'</strong></p>';
+                        }
 
-                        info_data.logs.forEach(function(items) {
+                        //If the length of the logs array 0 it will execute to no logs else with logs
+                        if (Object.keys(info_data.logs).length === 0) {
                             userLogs += '<tr>';
-                            userLogs += '<td>' + items.logs + '</td>'; // Close the <td> tags
-                            // Format the date
-                            const formattedDate = new Date(items.date);
-                            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
-                            const formattedDateString = formattedDate.toLocaleDateString(undefined, options);
-                            userLogs += '<td>' + formattedDateString + '</td>'; // Close the <td> tags
+                            userLogs += '<td>No logs </td>';
                             userLogs += '</tr>';
-                        });
+                        } else {
+                            info_data.logs.forEach(function(items) {
+                                userLogs += '<tr>';
+                                userLogs += '<td>' + items.logs + '</td>'; // Close the <td> tags
+                                // Format the date
+                                const formattedDate = new Date(items.date);
+                                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+                                const formattedDateString = formattedDate.toLocaleDateString(undefined, options);
+                                userLogs += '<td>' + formattedDateString + '</td>'; // Close the <td> tags
+                                userLogs += '</tr>';
+                            });
+                        }
                         load_data += '<div class="card">' +
                                     '<div class="card-header">' +
                                     '<ul class="nav nav-pills">' +
@@ -310,15 +335,10 @@ $user = new Admin();
                                     '<div class="col-10">'+
                                     '<h4>Information</h4>'+
                                     '</div>'+
-                                    '<div class="col-2">'+
-                                    '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateData.php?id='+info_data.data[0].user_id+'\'">Edit</button>'+
+                                    '<div class="col-2">'+ infoButton +
                                     '</div>'+
                                     '</div>'+
-                                    '<div class="card-body">'+
-                                    '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>'+
-                                    '<p><span>Phone Number: </span><strong>'+info_data.data[0].phoneNumber+'</strong></p>'+
-                                    '<p><span>Course: </span><strong>'+info_data.data[0].course+'</strong></p>'+
-                                    '<p><span>Year Level: </span><strong>'+info_data.data[0].yr_level+'</strong></p>'+
+                                    '<div class="card-body">'+ info +
                                     '</div>'+
                                     '</div>'+
                                     '</div>' +

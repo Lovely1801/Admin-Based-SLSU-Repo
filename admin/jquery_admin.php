@@ -21,6 +21,7 @@ if(isset($_GET['delete_file_id'])){
     $action->deleteFile($file_id);
 }
 
+//Updating the user
 if(isset($_POST['update_id'])){
     $user_id = $_POST['update_id'];
     $name = $_POST['name'];
@@ -34,6 +35,20 @@ if(isset($_POST['update_id'])){
 
     echo $result;
 }
+
+//Updating the admin
+if(isset($_POST['update_admin_id'])){
+    $user_id = $_POST['update_admin_id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $number = $_POST['number'];
+    $password = $_POST['password'];
+
+    $result = $action->updateAdmin($user_id,$name,$email,$number,$password);
+
+    echo $result;
+}
+
 
 if(isset($_POST['person_id'])){
     $user_id = $_POST['person_id'];
