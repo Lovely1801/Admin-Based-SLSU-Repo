@@ -88,22 +88,47 @@ class Admin{
     }
     
     //This function is use to update specific data base on the condition
-    function updateUser($user_id){
+    function updateUser($user_id,$name,$course,$year_level,$email,$number,$password){
         session_start();
         $admin_id = $_SESSION['admin_id'];
         $qry = $this->db->query("SELECT id, name FROM info WHERE id_num = '$admin_id'")->fetch_assoc();
         $admin_name = $qry['name'];
         $admin_id = $qry['id'];
         
-        extract($_POST);
         $user = $this->db->query("SELECT name FROM info WHERE id = '$user_id'")->fetch_array()['name'];
         
-        $data = " name = '$name' ".", email = '$email' ".", phoneNumber = '$phoneNumber' ".", password = '$password' ";
+        $data = " name = '$name' ".", email = '$email' ".", phoneNumber = '$number' ".", password = '$password' ";
+        $data2 = " yr_level = '$year_level' ".", course = '$course' ";
         $query = "UPDATE `info` SET ".$data." WHERE `id` = $user_id";
+        $query2 = "UPDATE `profile` SET ".$data2." WHERE `user_id` = $user_id";
         
-        if ($this->db->query($query) === TRUE) {
+        if ($this->db->query($query) === TRUE && $this->db->query($query2)) {
             $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is updating the user $user','$admin_id')");
-            return true;
+            if($qry){
+                return true;
+            }
+        } else {
+            return false;
+        }
+
+    }
+    function updateAbout($user_id,$about){
+        session_start();
+        $admin_id = $_SESSION['admin_id'];
+        $qry = $this->db->query("SELECT id, name FROM info WHERE id_num = '$admin_id'")->fetch_assoc();
+        $admin_name = $qry['name'];
+        $admin_id = $qry['id'];
+        
+        $user = $this->db->query("SELECT name FROM info WHERE id = '$user_id'")->fetch_array()['name'];
+        
+        $data2 = " about = '$about' ";
+        $query2 = "UPDATE `profile` SET ".$data2." WHERE `user_id` = $user_id";
+        
+        if ($this->db->query($query2) == true) {
+            $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is updating the user $user','$admin_id')");
+            if($qry){
+                return true;
+            }
         } else {
             return false;
         }

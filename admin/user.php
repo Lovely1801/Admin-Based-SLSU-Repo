@@ -191,6 +191,20 @@ if(isset($_GET['id'])){
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal fade" id="edit_info">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">User</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -242,12 +256,11 @@ if(isset($_GET['id'])){
                             userLogs += '</tr>';
                         });
                         load_data += '<div class="card">' +
-                                    '<div class="card-header d-flex">' +
+                                    '<div class="card-header">' +
                                     '<ul class="nav nav-pills">' +
                                     '<li class="nav-item"><a href="#profile" class="nav-link active" data-toggle="tab">Profile</a></li>' +
                                     '<li class="nav-item"><a href="#logs" class="nav-link" data-toggle="tab">Logs</a></li>' +
                                     '</ul>' +
-                                    '<button class="btn btn-primary" data-toggle="modal" data-target="#edit_info">Edit</button>'+
                                     '</div>' +
                                     '<div class="card-body">' +
                                     '<div class="tab-content">' +
@@ -274,8 +287,13 @@ if(isset($_GET['id'])){
                                     '</div>' +
                                     '<div class="col-12 col-md-8">' +
                                     '<div class="card">'+
-                                    '<div class="card-header">'+
+                                    '<div class="card-header row">'+
+                                    '<div class="col-10">'+
                                     '<h4>Information</h4>'+
+                                    '</div>'+
+                                    '<div class="col-2">'+
+                                    '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateData.php?id='+info_data.data[0].user_id+'\'">Edit</button>'+
+                                    '</div>'+
                                     '</div>'+
                                     '<div class="card-body">'+
                                     '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>'+
@@ -286,8 +304,13 @@ if(isset($_GET['id'])){
                                     '</div>'+
                                     '</div>' +
                                     '<div class="card">'+
-                                    '<div class="card-header">'+
+                                    '<div class="card-header row">'+
+                                    '<div class="col-11">'+
                                     '<h4>Information</h4>'+
+                                    '</div>'+
+                                    '<div class="col-1">'+
+                                    '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateAbout.php?id='+info_data.data[0].user_id+'\'">Edit</button>'+
+                                    '</div>'+
                                     '</div>'+
                                     '<div class="card-body">'+
                                     '<p><span></span><strong>'+info_data.data[0].about+'</strong></p>'+
@@ -356,15 +379,11 @@ if(isset($_GET['id'])){
                 },
                 error: function() {
                     // Handle error (if needed)
-                    $(document).Toasts('create', {
-                        class: 'bg-warning',
-                        title: 'Toast Title',
-                        subtitle: 'Subtitle',
-                        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                    })
                 }
             });
         }
+
+
     </script>
 </body>
 </html>

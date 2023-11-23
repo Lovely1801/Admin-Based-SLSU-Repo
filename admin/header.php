@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../dist/css/adminlte.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <!-- Jquery -->
 <script src="../plugins/jquery/jquery.min.js"></script>
@@ -29,6 +30,8 @@
 <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.js">
 <link rel="stylesheet" href="../plugins/toastr/toastr.min.js">

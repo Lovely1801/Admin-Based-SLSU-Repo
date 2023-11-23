@@ -21,6 +21,28 @@ if(isset($_GET['delete_file_id'])){
     $action->deleteFile($file_id);
 }
 
+if(isset($_POST['update_id'])){
+    $user_id = $_POST['update_id'];
+    $name = $_POST['name'];
+    $course = $_POST['course'];
+    $year_level = $_POST['year_level'];
+    $email = $_POST['email'];
+    $number = $_POST['number'];
+    $password = $_POST['password'];
+
+    $result = $action->updateUser($user_id,$name,$course,$year_level,$email,$number,$password);
+
+    echo $result;
+}
+
+if(isset($_POST['person_id'])){
+    $user_id = $_POST['person_id'];
+    $about = $_POST['about'];
+    $result = $action->updateAbout($user_id,$about);
+
+    echo $result;
+}
+
 if(isset($_GET['data_id'])){
     $user_id = $_GET['data_id'];
 
