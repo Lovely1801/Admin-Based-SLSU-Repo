@@ -1,3 +1,9 @@
+<style>
+    body{
+            margin: 0;
+            background: linear-gradient(289deg, #bdc4ef, #e6c9c9);
+        }
+</style>
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 <!-- Font Awesome Icons -->
@@ -12,10 +18,10 @@
 <link rel="stylesheet" href="../dist/css/adminlte.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <!-- Jquery -->
 <script src="../plugins/jquery/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <!-- Chart JS -->
 <script src="../dist/js/chart.min.js"></script>

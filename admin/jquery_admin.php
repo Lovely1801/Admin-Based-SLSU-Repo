@@ -71,4 +71,38 @@ if(isset($_POST['user_id'])){
 
     echo json_encode($data);
 }
+
+if(isset($_GET['get_data'])){
+    $data = $_GET['get_data'];
+
+    echo $data;
+}
+
+if(isset($_GET['recentUpload'])){
+    $recent = $_GET['recentUpload'];
+
+    if($recent == 'recent'){
+        $result = $action->recentUpload();
+    }
+    echo json_encode($result);
+}
+
+//Delete User
+if(isset($_GET['data'])){
+    $data = $_GET['data'];
+
+    $result = $action->deleteUser($data);
+
+    echo $result;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_num']) && isset($_POST['password'])) {
+    $id_num = $_POST['id_num'];
+    $password = $_POST['password'];
+
+    // Perform login authentication
+    $loginResult = $action->login($id_num, $password);
+    
+    echo $loginResult;
+}
 ?>

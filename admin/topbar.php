@@ -1,4 +1,4 @@
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background: linear-gradient(161deg, #b316fd, #587ada);">
     <div class="container-fluid">
         <a class="d-flex align-items-center nav-brand" href="#" role="button" data-widget="pushmenu">
             <img src="https://cdn-icons-png.flaticon.com/512/3767/3767094.png" alt="" width="40" height="40">

@@ -14,24 +14,11 @@ if(isset($_POST['submit'])){
     if($user->userExist($id) == true){
         echo "<script>alert('The {$id} ID Already Exists');</script>";
     }else{
-        if($user->addUser()){
-            echo "<script>alert('Register Successful!!');</script>";
-        }
+        var_dump($user->addUser());
+        // if($user->addUser()){
+        //     echo "<script>alert('Register Successful!!');</script>";
+        // }
     }
-}
-
-if(isset($_GET['id'])){
-    $id = $_GET['id'];
-
-    echo "<script>
-            const result = confirm('Are you sure you want to delete?');
-
-            if(result){
-                window.location.href='deleteData.php?id=$id';
-            }else{
-                window.location.href='user.php';
-            }
-        </script>";
 }
 ?>
 <!DOCTYPE html>
@@ -169,7 +156,7 @@ if(isset($_GET['id'])){
                                     <td><?= date("F j, Y g:i A", strtotime($user['date']))?></td>
                                     <td>
                                         <button class="view_info btn btn-primary btn-sm" data-toggle='modal' data-target='#viewData' data-id='<?= $user['id']?>'>View</button>
-                                        <button class="btn btn-danger btn-sm" onclick="window.location.href='user.php?id=<?= $user['id']?>'">Delete</button>
+                                        <button class="delUser btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUser" data-id="<?= $user['id']?>">Delete</button>
                                     </td>
                                     </tr>
                                 <?php } ?>
@@ -201,6 +188,20 @@ if(isset($_GET['id'])){
                                             </button>
                                         </div>
                                         <div class="modal-body">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="deleteUser">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <h class="4">Are you sure you want to delete?</h>
+                                            <div class="hidden_con"></div>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="delete_user btn btn-primary">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -356,7 +357,50 @@ if(isset($_GET['id'])){
 
                 reader.readAsDataURL(file);
             });
+
+            
+            $('.delUser').click(function(){
+                const data = $(this).data('id');
+                $.ajax({
+                    type: 'GET',
+                    url: 'jquery_admin.php',
+                    data: { get_data : data},
+                    success: function(response){
+                        var res = '';
+
+                        res+= '<input type="hidden" id="hidden_id" value="'+response+'"/>';
+                        $('.hidden_con').html(res);
+                    },
+                    error: function(){
+                        console.log('error');
+                    }
+                });
+            });
+            $('.delete_user').click(function(){
+                const data = $('#hidden_id').val();
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'jquery_admin.php',
+                    dataType: 'json',
+                    data: { data : data},
+                    success: function(response){
+                        if(response == true){
+                            toastr.success('Delete Successfully');
+
+                            setTimeout(function() {
+                                window.location.href='user.php';
+                            }, 2000);
+                        }
+                    },
+                    error: function(){
+                        toastr.error('Error Deleting');
+                    }
+                });
+            });
         });
+
+
         function uploadImage() {
             const formData = new FormData(document.getElementById('imageUploadForm'));
             // const imageData = $('#userImage').attr('src');

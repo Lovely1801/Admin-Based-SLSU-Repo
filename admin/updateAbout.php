@@ -54,7 +54,6 @@ if(isset($_GET['id'])){
                         dataType: 'json',
                         data: { person_id:id, about:about},
                         success: function(response){
-                            console.log(response);
                             if(response == true){
                                 toastr.success('Update Successfully');
 

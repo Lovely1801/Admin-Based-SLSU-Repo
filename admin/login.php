@@ -27,9 +27,14 @@ $conn->close();
                 <h1 class="h1">Admin</h1>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
-
-                <form action="" method="post">
+                <p class="login-box-msg">Sign in</p>
+                <form method="post" id="loginForm">
+                    <div class="input-group mb-2">
+                        <div class='form-control' id="incorrect" style="color: white;background-color: #dc3545; display: none;">Incorrect Username or Password</div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class='form-control' id="notfound" style="color: white;background-color: #dc3545; display: none;">User not Found</div>
+                    </div>
                     <div class="input-group mb-3">
                     <input type="text" class="form-control" name='id_num' placeholder="ID Number">
                     <div class="input-group-append">
@@ -48,12 +53,44 @@ $conn->close();
                     </div>
                     <div class="d-flex justify-content-end">
                     <div class="col-4 px-0">
-                        <button type="submit" name='submit' class="btn btn-primary btn-block">Sign In</button>
+                        <button type="submit" id="submitBtn" name='submit' class="btn btn-primary btn-block">Sign In</button>
                     </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function(){
+            $('#submitBtn').on('click', function(e) {
+                e.preventDefault();
+
+                var formData = $('#loginForm').serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'jquery_admin.php',
+                    data: formData,
+                    success: function(response) {
+                        if(response.trim() == 1){
+                            toastr.success('Login successful!');
+                            setTimeout(function() {
+                                window.location.href = 'dashboard.php';
+                            }, 2000);
+                        }else if(response.trim() == 2){
+                            $('#incorrect').show();
+                            $('#notfound').hide();
+                        }else if(response.trim() == 3){
+                            $('#notfound').show();
+                            $('#incorrect').hide();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

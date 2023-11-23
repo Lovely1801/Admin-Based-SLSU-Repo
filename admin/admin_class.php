@@ -25,15 +25,14 @@ class Admin{
                 // Password is correct
                 $_SESSION['admin_id'] = $id_num;
                 $query = $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES ('".$row['name']." is logging in','".$row['id']."')");
-                echo "<script>alert('Login Successfully!!'); window.location.href='dashboard.php';</script>";
-                exit();
+                return 1;
             } else {
                 // Password is incorrect
-                echo "<script>alert('Password Incorrect!!');</script>";
+                return 2;
             }
         } else {
             // User not found
-            echo "<script>alert('User not Found!!');</script>";
+            return 3;
         }
     }
 
@@ -78,8 +77,11 @@ class Admin{
 
         extract($_POST);
         //Inserting Data of the table info
-        $sql = "INSERT INTO info (id_num,name,email,phoneNumber,status,password) VALUES ('$idNum','$name','$email','$phoneNumber','$status','$password')";
-        if ($this->db->query($sql) === TRUE) {
+        $sql = $this->db->query("INSERT INTO info (id_num,name,email,phoneNumber,status,password) VALUES ('$idNum','$name','$email','$phoneNumber','$status','$password')");
+        $fetch = $this->db->query("SELECT id, name FROM info WHERE id_num = '$idNum'")->fetch_assoc();
+        $id_num = $fetch['id'];
+        $sql2 = $this->db->query("INSERT INTO `profile`(`user_id`) VALUES ('$id_num')");
+        if ($sql && $sql2) {
             $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is adding new user','$admin_id')");
             return true;
         } else {
@@ -146,8 +148,10 @@ class Admin{
         $user_name = $this->db->query("SELECT name FROM info WHERE id = '$user_id'")->fetch_array()['name'];
 
         $sql = "DELETE FROM info WHERE id = $user_id";
+        $sql2 = "DELETE FROM profile WHERE user_id = $user_id";
         $result = $this->db->query($sql);
-        if($result == true){
+        $result2 = $this->db->query($sql2);
+        if($result == true && $result2 == true){
             $qry = $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES('$name is deleting user $user_name','$admin_id')");
             return true;
         }else{
@@ -483,6 +487,17 @@ class Admin{
         if($sql){
             return 1;
         }
+    }
+
+    function recentUpload(){
+        $data = array();
+        $qry = $this->db->query("SELECT * FROM uploaded_files ORDER BY date DESC LIMIT 3");
+        if($qry->num_rows > 0){
+            while($row = $qry->fetch_assoc()){
+                $data[] = $row;
+            }
+        }
+        return $data;
     }
 
 }

@@ -54,8 +54,8 @@ $countDownload = $action->totalDownloads();
                 <div class="container">
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon"><i class='far fa-regular fa-user'></i></span>
+                            <div class="info-box" style="background: #b4b4ec">
+                                <span class="info-box-icon" onclick="window.location.href='user.php'"><i class='far fa-regular fa-user'></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Users</span>
                                     <span class="info-box-number"><?= $countUser ?></span>
@@ -64,7 +64,7 @@ $countDownload = $action->totalDownloads();
                         </div>
                         <div class="col-6 col-sm-6 col-md-3">
                             <div class="info-box bg-warning">
-                                <span class="info-box-icon"><i class='far fa-regular fa-file'></i></span>
+                                <span class="info-box-icon" onclick="window.location.href='repository.php'"><i class='far fa-regular fa-file'></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Files</span>
                                     <span class="info-box-number"><?= $countFile ?></span>
@@ -73,7 +73,7 @@ $countDownload = $action->totalDownloads();
                         </div>
                         <div class="col-6 col-sm-6 col-md-3">
                             <div class="info-box bg-info">
-                                <span class="info-box-icon"><i class='fa fa-regular fa-download'></i></span>
+                                <span class="info-box-icon" onclick="window.location.href='repository.php'"><i class='fa fa-regular fa-download'></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Downloads</span>
                                     <span class="info-box-number"><?= $countDownload ?></span>
@@ -82,7 +82,7 @@ $countDownload = $action->totalDownloads();
                         </div>
                         <div class="col-6 col-sm-6 col-md-3">
                             <div class="info-box bg-gradient-success">
-                                <span class="info-box-icon"><i class='far fa-thumbs-up'></i></span>
+                                <span class="info-box-icon" onclick="window.location.href='repository.php'"><i class='far fa-thumbs-up'></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Likes</span>
                                     <span class="info-box-number"><?= $countLike ?></span>
@@ -124,14 +124,22 @@ $countDownload = $action->totalDownloads();
                                     </div>
                                 </div>
                                 <div class="card-body">
-
+                                    <table class="table table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="recentUpload">
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-4 col-md-3 mt-2">
+                        <!-- <div class="col-12 col-sm-4 col-md-3 mt-2">
                             <div class="card card-dark">
                                 <div class="card-header">
-                                    <h3 class='card-title'>Recent Upload</h3>
+                                    <h3 class='card-title'>Recent </h3>
                                     <div class="card-tools">
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                             <i class="fas fa-minus"></i>
@@ -145,7 +153,7 @@ $countDownload = $action->totalDownloads();
 
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -154,6 +162,26 @@ $countDownload = $action->totalDownloads();
     </div>
 
     <script>
+            function recent_upload(){
+            $.ajax({
+                type: 'GET',
+                url: 'jquery_admin.php',
+                data: { recentUpload : 'recent'},
+                success: function(response){
+                    var loadUpload = JSON.parse(response);
+                    var content = '';
+                    console.log(response);
+                    loadUpload.forEach(function(item){
+                        content += '<tr>';
+                        content += '<td>' + item.file_name + '</td>';
+                        content += '</tr>';
+                    });
+                    $('.recentUpload').html(content);
+                }
+            });
+        }
+        recent_upload();
+
         function createChart() {
             fetch('chart_dl.php')
                 .then(response => response.json())

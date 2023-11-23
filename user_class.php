@@ -23,14 +23,13 @@ class User{
                 $_SESSION['user_id'] = $id_num;
                 $query = $this->db->query("INSERT INTO activity_logs (logs, user_id) VALUES ('".$row['name']." is logging in','".$row['id']."')");
                 if($query){
-                    echo "<script>alert('Login Successfully!!'); window.location.href='index.php';</script>";
-                    exit();
+                    return 1;
                 }
             }else{
-                echo "<script>alert('Password Incorrect!!');</script>";
+                return 2;
             }
         }else{
-            echo "<script>alert('User not Found!!');</script>";
+            return 3;
         }
     }
 

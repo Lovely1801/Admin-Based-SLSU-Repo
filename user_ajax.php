@@ -75,4 +75,14 @@ if(isset($_GET['mostRate'])){
     echo json_encode($data);
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_num']) && isset($_POST['password'])) {
+    $id_num = $_POST['id_num'];
+    $password = $_POST['password'];
+
+    // Perform login authentication
+    $loginResult = $action->login($id_num, $password);
+    
+    echo $loginResult;
+}
+
 ?>
