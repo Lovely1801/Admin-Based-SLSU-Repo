@@ -68,14 +68,13 @@ class Admin{
     }
 
     //This function add user in the database
-    function addUser() {
+    function addUser($idNum,$name,$phoneNumber,$email,$status,$password) {
         session_start();
         $admin_id = $_SESSION['admin_id'];
         $qry = $this->db->query("SELECT id, name FROM info WHERE id_num = '$admin_id'")->fetch_assoc();
         $admin_name = $qry['name'];
         $admin_id = $qry['id'];
-
-        extract($_POST);
+        
         //Inserting Data of the table info
         $sql = $this->db->query("INSERT INTO info (id_num,name,email,phoneNumber,status,password) VALUES ('$idNum','$name','$email','$phoneNumber','$status','$password')");
         $fetch = $this->db->query("SELECT id, name FROM info WHERE id_num = '$idNum'")->fetch_assoc();

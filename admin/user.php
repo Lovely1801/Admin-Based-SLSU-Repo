@@ -9,17 +9,16 @@ if(!isset($_SESSION['admin_id'])){
 
 $user = new Admin();
 
-if(isset($_POST['submit'])){
-    $id = $_POST['idNum'];
-    if($user->userExist($id) == true){
-        echo "<script>alert('The {$id} ID Already Exists');</script>";
-    }else{
-        var_dump($user->addUser());
-        // if($user->addUser()){
-        //     echo "<script>alert('Register Successful!!');</script>";
-        // }
-    }
-}
+// if(isset($_POST['submit'])){
+//     $id = $_POST['idNum'];
+//     if($user->userExist($id) == true){
+//         echo "<script>alert('The {$id} ID Already Exists');</script>";
+//     }else{
+//         if($user->addUser()){
+//             echo "<script>alert('Register Successful!!');</script>";
+//         }
+//     }
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,11 +64,11 @@ if(isset($_POST['submit'])){
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="" method="post">
+                                    <form method="post" id="registrationForm">
                                         <div class="row">
                                             <div class="col-6">
-                                                <label for="username">ID Number</label>
-                                                <input type="text" class="form-control" id="username" name="idNum" required>
+                                                <label for="idNum">ID Number</label>
+                                                <input type="text" class="form-control" id="idNum" name="idNum" required>
                                             </div>
                                             <div class="col-6">
                                                 <label for="name">Name</label>
@@ -81,13 +80,12 @@ if(isset($_POST['submit'])){
                                                 <input type="text" class="form-control" id="number" name="phoneNumber" required>
                                             </div>
                                             <div class="col-6">
-                                                <label for="number">Status</label>
+                                                <label for="status">Status</label>
                                                 <select name="status" id="status" class="form-control">
                                                     <option value="admin">Admin</option>
                                                     <option value="user">User</option>
                                                 </select>
                                             </div>
-    
                                             <div class="col-12">
                                                 <label for="email">Email</label>
                                                 <input type="email" class="form-control" id="email" name="email" required>
@@ -97,7 +95,7 @@ if(isset($_POST['submit'])){
                                                 <input type="password" class="form-control" id="password" name="password" required>
                                             </div>
                                             <br><br><br><br>
-                                            <button type="submit" name='submit' class="btn btn-primary col-12">Register</button>
+                                            <button type="button" id="submitReg" name='submit' class="btn btn-primary col-12">Register</button>
                                         </div>
 
                                     </form>
@@ -216,6 +214,26 @@ if(isset($_POST['submit'])){
 
     <script>
         $(document).ready(function() {
+            $('#submitReg').click(function(){
+                var formData = $('#registrationForm').serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'jquery_admin.php',
+                    data: formData,
+                    success: function(response){
+                        if(response == 'exist'){
+                            toastr.info('ID Already Exists');
+                        }else if(response == 'success'){
+                            toastr.success('Delete Successfully');
+                            window.location.reload();
+                        }
+                    },
+                    error: function(){
+                        toastr.error('Error');
+                    }
+                });
+            });
             // Add an input event listener to the search input field
             $('#searchInput').on('input', function() {
             const query = $(this).val();
