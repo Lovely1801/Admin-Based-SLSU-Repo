@@ -9,17 +9,16 @@ if(!isset($_SESSION['admin_id'])){
 
 $user = new Admin();
 
-if(isset($_POST['submit'])){
-    $id = $_POST['idNum'];
-    if($user->userExist($id) == true){
-        echo "<script>alert('The {$id} ID Already Exists');</script>";
-    }else{
-        var_dump($user->addUser());
-        // if($user->addUser()){
-        //     echo "<script>alert('Register Successful!!');</script>";
-        // }
-    }
-}
+// if(isset($_POST['submit'])){
+//     $id = $_POST['idNum'];
+//     if($user->userExist($id) == true){
+//         echo "<script>alert('The {$id} ID Already Exists');</script>";
+//     }else{
+//         if($user->addUser()){
+//             echo "<script>alert('Register Successful!!');</script>";
+//         }
+//     }
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,11 +64,11 @@ if(isset($_POST['submit'])){
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="" method="post">
+                                    <form method="post" id="registrationForm">
                                         <div class="row">
                                             <div class="col-6">
-                                                <label for="username">ID Number</label>
-                                                <input type="text" class="form-control" id="username" name="idNum" required>
+                                                <label for="idNum">ID Number</label>
+                                                <input type="text" class="form-control" id="idNum" name="idNum" required>
                                             </div>
                                             <div class="col-6">
                                                 <label for="name">Name</label>
@@ -81,13 +80,12 @@ if(isset($_POST['submit'])){
                                                 <input type="text" class="form-control" id="number" name="phoneNumber" required>
                                             </div>
                                             <div class="col-6">
-                                                <label for="number">Status</label>
+                                                <label for="status">Status</label>
                                                 <select name="status" id="status" class="form-control">
                                                     <option value="admin">Admin</option>
                                                     <option value="user">User</option>
                                                 </select>
                                             </div>
-    
                                             <div class="col-12">
                                                 <label for="email">Email</label>
                                                 <input type="email" class="form-control" id="email" name="email" required>
@@ -97,7 +95,7 @@ if(isset($_POST['submit'])){
                                                 <input type="password" class="form-control" id="password" name="password" required>
                                             </div>
                                             <br><br><br><br>
-                                            <button type="submit" name='submit' class="btn btn-primary col-12">Register</button>
+                                            <button type="button" id="submitReg" name='submit' class="btn btn-primary col-12">Register</button>
                                         </div>
 
                                     </form>
@@ -216,6 +214,26 @@ if(isset($_POST['submit'])){
 
     <script>
         $(document).ready(function() {
+            $('#submitReg').click(function(){
+                var formData = $('#registrationForm').serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'jquery_admin.php',
+                    data: formData,
+                    success: function(response){
+                        if(response == 'exist'){
+                            toastr.info('ID Already Exists');
+                        }else if(response == 'success'){
+                            toastr.success('Delete Successfully');
+                            window.location.reload();
+                        }
+                    },
+                    error: function(){
+                        toastr.error('Error');
+                    }
+                });
+            });
             // Add an input event listener to the search input field
             $('#searchInput').on('input', function() {
             const query = $(this).val();
@@ -244,18 +262,43 @@ if(isset($_POST['submit'])){
                         console.log(info_data);
                         var load_data = '';
                         var userLogs = '';
+                        var infoButton = '';
+                        var info = '';
                         
+                        //Comparing the status of the user for the button
+                        if(info_data.data[0].status === 'admin'){
+                            infoButton += '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateAdminData.php?id='+info_data.data[0].user_id+'\'">Edit</button>';
+                        }else{
+                            infoButton += '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateData.php?id='+info_data.data[0].user_id+'\'">Edit</button>';
+                        }
+                        //Comparing the status of the user for the info
+                        if(info_data.data[0].status === 'admin'){
+                            info += '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>';
+                            info += '<p><span>Phone Number: </span><strong>'+info_data.data[0].phoneNumber+'</strong></p>';
+                        }else{
+                            info += '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>';
+                            info += '<p><span>Phone Number: </span><strong>'+info_data.data[0].phoneNumber+'</strong></p>';
+                            info += '<p><span>Course: </span><strong>'+info_data.data[0].course+'</strong></p>';
+                            info += '<p><span>Year Level: </span><strong>'+info_data.data[0].yr_level+'</strong></p>';
+                        }
 
-                        info_data.logs.forEach(function(items) {
+                        //If the length of the logs array 0 it will execute to no logs else with logs
+                        if (Object.keys(info_data.logs).length === 0) {
                             userLogs += '<tr>';
-                            userLogs += '<td>' + items.logs + '</td>'; // Close the <td> tags
-                            // Format the date
-                            const formattedDate = new Date(items.date);
-                            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
-                            const formattedDateString = formattedDate.toLocaleDateString(undefined, options);
-                            userLogs += '<td>' + formattedDateString + '</td>'; // Close the <td> tags
+                            userLogs += '<td>No logs </td>';
                             userLogs += '</tr>';
-                        });
+                        } else {
+                            info_data.logs.forEach(function(items) {
+                                userLogs += '<tr>';
+                                userLogs += '<td>' + items.logs + '</td>'; // Close the <td> tags
+                                // Format the date
+                                const formattedDate = new Date(items.date);
+                                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+                                const formattedDateString = formattedDate.toLocaleDateString(undefined, options);
+                                userLogs += '<td>' + formattedDateString + '</td>'; // Close the <td> tags
+                                userLogs += '</tr>';
+                            });
+                        }
                         load_data += '<div class="card">' +
                                     '<div class="card-header">' +
                                     '<ul class="nav nav-pills">' +
@@ -292,15 +335,10 @@ if(isset($_POST['submit'])){
                                     '<div class="col-10">'+
                                     '<h4>Information</h4>'+
                                     '</div>'+
-                                    '<div class="col-2">'+
-                                    '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateData.php?id='+info_data.data[0].user_id+'\'">Edit</button>'+
+                                    '<div class="col-2">'+ infoButton +
                                     '</div>'+
                                     '</div>'+
-                                    '<div class="card-body">'+
-                                    '<p><span>Id Number: </span><strong>'+info_data.data[0].id_num+'</strong></p>'+
-                                    '<p><span>Phone Number: </span><strong>'+info_data.data[0].phoneNumber+'</strong></p>'+
-                                    '<p><span>Course: </span><strong>'+info_data.data[0].course+'</strong></p>'+
-                                    '<p><span>Year Level: </span><strong>'+info_data.data[0].yr_level+'</strong></p>'+
+                                    '<div class="card-body">'+ info +
                                     '</div>'+
                                     '</div>'+
                                     '</div>' +

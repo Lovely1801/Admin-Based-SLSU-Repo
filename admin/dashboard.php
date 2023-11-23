@@ -89,7 +89,7 @@ $countDownload = $action->totalDownloads();
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-6 mt-2">
+                        <div class="col-12 col-sm-6 col-md-7 mt-2">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">Download Graph</h3>
@@ -110,7 +110,7 @@ $countDownload = $action->totalDownloads();
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-4 col-md-3 mt-2">
+                        <div class="col-12 col-sm-4 col-md-5 mt-2">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class='card-title'>Recent Upload</h3>

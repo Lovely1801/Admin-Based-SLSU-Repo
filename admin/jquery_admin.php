@@ -21,6 +21,7 @@ if(isset($_GET['delete_file_id'])){
     $action->deleteFile($file_id);
 }
 
+//Updating the user
 if(isset($_POST['update_id'])){
     $user_id = $_POST['update_id'];
     $name = $_POST['name'];
@@ -34,6 +35,20 @@ if(isset($_POST['update_id'])){
 
     echo $result;
 }
+
+//Updating the admin
+if(isset($_POST['update_admin_id'])){
+    $user_id = $_POST['update_admin_id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $number = $_POST['number'];
+    $password = $_POST['password'];
+
+    $result = $action->updateAdmin($user_id,$name,$email,$number,$password);
+
+    echo $result;
+}
+
 
 if(isset($_POST['person_id'])){
     $user_id = $_POST['person_id'];
@@ -104,5 +119,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_num']) && isset($_P
     $loginResult = $action->login($id_num, $password);
     
     echo $loginResult;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['idNum']) && isset($_POST['name'])) {
+    $idNum = $_POST['idNum'];
+    $name = $_POST['name'];
+    $phoneNumber = $_POST['phoneNumber'];
+    $email = $_POST['email'];
+    $status = $_POST['status'];
+    $password = $_POST['password'];
+
+    if($action->userExist($idNum) == true){
+        echo 'exist';
+    }else{
+        if($action->addUser($idNum,$name,$phoneNumber,$email,$status,$password)){
+            echo 'success';
+        }
+    }
 }
 ?>

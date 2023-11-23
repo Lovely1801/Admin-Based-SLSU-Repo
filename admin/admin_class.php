@@ -68,24 +68,21 @@ class Admin{
     }
 
     //This function add user in the database
-    function addUser() {
+    function addUser($idNum,$name,$phoneNumber,$email,$status,$password) {
         session_start();
         $admin_id = $_SESSION['admin_id'];
         $qry = $this->db->query("SELECT id, name FROM info WHERE id_num = '$admin_id'")->fetch_assoc();
         $admin_name = $qry['name'];
         $admin_id = $qry['id'];
 
-        extract($_POST);
         //Inserting Data of the table info
         $sql = $this->db->query("INSERT INTO info (id_num,name,email,phoneNumber,status,password) VALUES ('$idNum','$name','$email','$phoneNumber','$status','$password')");
         $fetch = $this->db->query("SELECT id, name FROM info WHERE id_num = '$idNum'")->fetch_assoc();
         $id_num = $fetch['id'];
-        $sql2 = $this->db->query("INSERT INTO `profile`(`user_id`) VALUES ('$id_num')");
+        $sql2 = $this->db->query("INSERT INTO `profile`(`user_id`,`yr_level`,`course`,`about`,`image_path`) VALUES ('$id_num','','','','')");
         if ($sql && $sql2) {
             $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is adding new user','$admin_id')");
             return true;
-        } else {
-            return false;
         }
     }
     
@@ -105,6 +102,29 @@ class Admin{
         $query2 = "UPDATE `profile` SET ".$data2." WHERE `user_id` = $user_id";
         
         if ($this->db->query($query) === TRUE && $this->db->query($query2)) {
+            $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is updating the user $user','$admin_id')");
+            if($qry){
+                return true;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    function updateAdmin($user_id,$name,$email,$number,$password){
+        session_start();
+        $admin_id = $_SESSION['admin_id'];
+        $qry = $this->db->query("SELECT id, name FROM info WHERE id_num = '$admin_id'")->fetch_assoc();
+        $admin_name = $qry['name'];
+        $admin_id = $qry['id'];
+        
+        $user = $this->db->query("SELECT name FROM info WHERE id = '$user_id'")->fetch_array()['name'];
+        
+        $data = " name = '$name' ".", email = '$email' ".", phoneNumber = '$number' ".", password = '$password' ";
+        $query = "UPDATE `info` SET ".$data." WHERE `id` = $user_id";
+        
+        if ($this->db->query($query) === TRUE) {
             $qry = $this->db->query("INSERT INTO activity_logs (logs,user_id) VALUES('$admin_name is updating the user $user','$admin_id')");
             if($qry){
                 return true;
