@@ -247,7 +247,7 @@ if(isset($_GET['id'])){
                                     '<li class="nav-item"><a href="#profile" class="nav-link active" data-toggle="tab">Profile</a></li>' +
                                     '<li class="nav-item"><a href="#logs" class="nav-link" data-toggle="tab">Logs</a></li>' +
                                     '</ul>' +
-                                    '<button data-toggle="modal" data-target="#edit_info">Edit</button>'
+                                    '<button class="btn btn-primary" data-toggle="modal" data-target="#edit_info">Edit</button>'+
                                     '</div>' +
                                     '<div class="card-body">' +
                                     '<div class="tab-content">' +
