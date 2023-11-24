@@ -26,6 +26,9 @@ $countDownload = $action->totalDownloads();
     <title>Admin Dashboard</title>
     <?php include 'header.php'; ?>
     <style>
+        .backgr{
+            background: linear-gradient(289deg, #bdc4ef, #e6c9c9);
+        }
         canvas {
             max-width: 100%;
             height: auto;
@@ -39,7 +42,7 @@ $countDownload = $action->totalDownloads();
         <?php include 'topbar.php';?>
         <?php include 'sidebar.php';?>
 
-        <div class="content-wrapper">
+        <div class="backgr content-wrapper">
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2 text-center">

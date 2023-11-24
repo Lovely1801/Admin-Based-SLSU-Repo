@@ -32,18 +32,18 @@ if(isset($_GET['id'])){
                         <div class="card-header text-center">
                             Update User
                         </div>
-                        <div class="card-body">
+                        <div class="card-body row">
                             <input type="hidden" id="id" value="<?= $id ?>">
-                            <div class="form-group">
+                            <div class="form-group col-12">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" id="name" name="name" value="<?= $name?>" required>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group col-6">
                                 <label for="course">Course</label>
                                 <input type="text" class="form-control" id="course" name="course" value="<?= $course?>" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group col-6">
                                 <label for="year_level">Year Level</label>
                                 <input type="text" class="form-control" id="year_level" name="year_level" value="<?= $year_level?>" required>
                             </div>

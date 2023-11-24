@@ -14,6 +14,28 @@ if(isset($_GET['download_file_id'])){
     echo $count;
 }
 
+// if(isset($_POST['load_data'])){
+//     $loadData = $_POST['load_data'];
+//     if($loadData == 'load_data'){
+//         $data = $action->getAllUser();
+
+//         foreach($data as $user){
+//             echo '<tr>';
+//             echo '<td>'.$user['id_num'].'</td>';
+//             echo '<td>'.$user['name'].'</td>';
+//             echo '<td>'.$user['phoneNumber'].'</td>';
+//             echo '<td>'.$user['email'].'</td>';
+//             echo '<td>'.$user['status'].'</td>';
+//             echo '<td>'.date("F j, Y g:i A", strtotime($user['date'])).'</td>';
+//             echo '<td>';
+//             echo    '<button class="view_info btn btn-primary btn-sm" data-toggle="modal" data-target="#viewData" data-id="'.$user['id'].'">View</button>';
+//             echo    '<button class="delUser btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUser" data-id="'.$user['id'].'">Delete</button>';
+//             echo '</td>';
+//             echo '</tr>';
+//         }
+//     }
+// }
+
 //Deleting Data of file
 if(isset($_GET['delete_file_id'])){
     $file_id = $_GET['delete_file_id'];

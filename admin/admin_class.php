@@ -205,11 +205,11 @@ class Admin{
                 echo '<td>' . $user['name'] . '</td>';
                 echo '<td>' . $user['phoneNumber'] . '</td>';
                 echo '<td>' . $user['email'] . '</td>';
-                echo '<td>' . date("F j, Y g:i A", strtotime($user['date'])) . '</td>';
                 echo '<td>' . $user['status'] . '</td>';
+                echo '<td>' . date("F j, Y g:i A", strtotime($user['date'])) . '</td>';
                 echo '<td>';
-                echo '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'updateData.php?id=' . $user['id'] . '\'">Update</button>';
-                echo '<button class="btn btn-danger btn-sm" onclick="deleteUser(' . $user['id'] . ')">Delete</button>';
+                echo '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#viewDatass" data-id="'. $user['id'] .'">View</button>&nbsp;&nbsp';
+                echo '<button class="delUser btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUser" data-id="'. $user['id'] .'">Delete</button>';
                 echo '</td>';
                 echo '</tr>';
             }
@@ -309,8 +309,8 @@ class Admin{
                     </td>
                 <?php
                 echo '<td>';
-                echo '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'download.php?=' . $file['id'] . '\'">Update</button>';
-                echo '<button class="btn btn-danger btn-sm" onclick="wind.ow.location.href=\'user.php?=id'. $file['id']. '\'">Delete</button>';
+                echo '<button class="btn btn-primary btn-sm" onclick="window.location.href=\'download.php?file=' . $file['id'] . '\'">Update</button>';
+                echo '<button class="delete-btn btn btn-danger btn-sm" data-id="'.$fileData['id'].'">Delete</button>';
                 echo '</td>';
                 echo '</tr>';
             }
