@@ -183,7 +183,7 @@ class Admin{
     function getAllUser() {
         $data = array();
         // SQL query to retrieve data from the "info" table
-        $sql = "SELECT * FROM info";
+        $sql = "SELECT * FROM info ORDER BY date DESC";
         $result = $this->db->query($sql);
 
         if ($result->num_rows > 0) {
