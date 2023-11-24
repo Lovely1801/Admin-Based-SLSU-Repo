@@ -27,19 +27,24 @@ $user = new Admin();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User</title>
     <?php include 'header.php'; ?>
+    <style>
+        .backgr{
+            background: linear-gradient(289deg, #bdc4ef, #e6c9c9);
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
         <?php include 'topbar.php';?>
         <?php include 'sidebar.php';?>
         <!-- Main Content of Repository -->
-        <div class="content-wrapper">
+        <div class="backgr content-wrapper">
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2 text-center">
                         <div class="col-sm-12">
                             <h1 class="m-0">
-                                File Repository
+                                User Table
                             </h1>
                         </div>
                     </div>
@@ -112,7 +117,10 @@ $user = new Admin();
                         <div class="card-header">
                             <h3 class="card-title">User Table</h3>
 
-                            <div class="card-tools">
+                            <div class="d-flex card-tools align-items-center">
+
+                                <!-- <button class='rounded btn btn-primary btn-sm'>Asc</button>
+                                <button class='rounded btn btn-info btn-sm'>Desc</button>&nbsp; -->
                             <div class="input-group input-group-sm" style="width: 150px;">
                                 <input type="text" name="table_search" id='searchInput' class="form-control float-right" placeholder="Search">
 
@@ -126,7 +134,7 @@ $user = new Admin();
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0" style="height: 300px;">
-                            <table class="table table-head-fixed text-nowrap">
+                            <table class="table table-head-fixed text-nowrap" id="usertable">
                             <thead>
                                 <tr>
                                 <th>ID Number</th>
@@ -138,30 +146,44 @@ $user = new Admin();
                                 <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="loadUserData">
                                 <?php 
-                                $getData = new Admin();
-                                $data = $getData->getAllUser();
+                                    $getData = new Admin();
+                                    $data = $getData->getAllUser();
 
-                                foreach($data as $user){
-                                ?>
-                                    <tr>
-                                    <td><?= $user['id_num']?></td>
-                                    <td><?= $user['name']?></td>
-                                    <td><?= $user['phoneNumber']?></td>
-                                    <td><?= $user['email']?></td>
-                                    <td><?= $user['status']?></td>
-                                    <td><?= date("F j, Y g:i A", strtotime($user['date']))?></td>
-                                    <td>
-                                        <button class="view_info btn btn-primary btn-sm" data-toggle='modal' data-target='#viewData' data-id='<?= $user['id']?>'>View</button>
-                                        <button class="delUser btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUser" data-id="<?= $user['id']?>">Delete</button>
-                                    </td>
-                                    </tr>
-                                <?php } ?>
+                                    foreach($data as $user){
+                                    ?>
+                                        <tr>
+                                        <td><?= $user['id_num']?></td>
+                                        <td><?= $user['name']?></td>
+                                        <td><?= $user['phoneNumber']?></td>
+                                        <td><?= $user['email']?></td>
+                                        <td><?= $user['status']?></td>
+                                        <td><?= date("F j, Y g:i A", strtotime($user['date']))?></td>
+                                        <td>
+                                            <button class="view_info btn btn-primary btn-sm" data-toggle='modal' data-target='#viewData' data-id='<?= $user['id']?>'>View</button>
+                                            <button class="delUser btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUser" data-id="<?= $user['id']?>">Delete</button>
+                                        </td>
+                                        </tr>
+                                    <?php } ?>
                             </tbody>
                             </table>
                         </div>
                         <!-- Load modal -->
+                            <div class="modal fade" id="viewData">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">User</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id='modal-data'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="modal fade" id="viewData">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -214,6 +236,17 @@ $user = new Admin();
 
     <script>
         $(document).ready(function() {
+            // function loadUser(){
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: 'jquery_admin.php',
+            //         data: { load_data: 'load_data'},
+            //         success: function(response){
+            //             $('#loadUserData').html(response);
+            //         }
+            //     });
+            // }
+            // loadUser();
             $('#submitReg').click(function(){
                 var formData = $('#registrationForm').serialize();
 
@@ -250,9 +283,12 @@ $user = new Admin();
                 });
             });
             
-            $('.view_info').click(function(){
+            $('.super').click(function(){
                 const data = $(this).data('id');
-
+                console.log(data);
+            });
+            $('.view_info').on('click',function(){
+                const data = $(this).data('id');
                 $.ajax({
                     type: 'GET',
                     url: 'jquery_admin.php',
@@ -407,6 +443,7 @@ $user = new Admin();
                         var res = '';
 
                         res+= '<input type="hidden" id="hidden_id" value="'+response+'"/>';
+                        console.log(response);
                         $('.hidden_con').html(res);
                     },
                     error: function(){
@@ -464,8 +501,6 @@ $user = new Admin();
                 }
             });
         }
-
-
     </script>
 </body>
 </html>
