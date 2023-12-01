@@ -255,7 +255,7 @@ class Admin{
                     <td><?php if($action->getLikeVal($file['id']) == true){?>
                         <button class="like like-liked" data-id="<?= $file['id']?>"><i class="fa fa-regular fa-thumbs-up"></i></button>
                     <?php }else{?>
-                        <button class="like" data-id="<?= $fileData['id']?>"><i class="fa fa-regular fa-thumbs-up"></i></button>
+                        <button class="like" data-id="<?= $file['id']?>"><i class="fa fa-regular fa-thumbs-up"></i></button>
                     <?php }?>
                     </td>
                 <?php
@@ -407,7 +407,7 @@ class Admin{
 
         $data = array();
 
-        $qry = $this->db->query("SELECT * From activity_logs WHERE user_id = '$admin' ORDER BY date DESC");
+        $qry = $this->db->query("SELECT * From activity_logs WHERE user_id = '$user' ORDER BY date DESC");
         if($qry->num_rows > 0){
             while($rows = $qry->fetch_assoc()){
                 $data[] = $rows;
