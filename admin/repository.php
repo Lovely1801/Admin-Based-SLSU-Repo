@@ -14,6 +14,9 @@ if(!isset($_SESSION['admin_id'])){
     <title>Repository</title>
     <?php include 'header.php'; ?>
     <style>
+        .backgr{
+            background: linear-gradient(289deg, #bdc4ef, #e6c9c9);
+        }
         .like{
             border: none;
             background: none;
@@ -36,7 +39,7 @@ if(!isset($_SESSION['admin_id'])){
         <?php include 'topbar.php';?>
         <?php include 'sidebar.php';?>
         <!-- Main Content of Repository -->
-        <div class="content-wrapper">
+        <div class="backgr content-wrapper">
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2 text-center">
@@ -51,8 +54,8 @@ if(!isset($_SESSION['admin_id'])){
             <hr>
             <!-- Main content -->
             <div class="content">
-                <div class="container-fluid">
-                    <button class="mb-3 btn bg-primary align-items-center" onclick="window.location.href='upload.php'">
+                <div class="container">
+                    <button class="mb-3 btn bg-primary btn-sm align-items-center" onclick="window.location.href='upload.php'">
                     <span class="info-box-text">Upload File</span>
                     </button>
                     <div class="row">
@@ -76,7 +79,7 @@ if(!isset($_SESSION['admin_id'])){
                                 </div>
                                     <!-- /.card-header -->
                                 <div class="card-body table-responsive p-0" style="height: 300px;">
-                                    <table class="table table-head-fixed text-nowrap">
+                                    <table id='repotable' class="table table-head-fixed text-nowrap">
                                         <thead>
                                             <tr>
                                             <th>File Name</th>
@@ -126,15 +129,15 @@ if(!isset($_SESSION['admin_id'])){
                 </div>
             </div>
         </div>
+        <?php include 'footer.php';?>
     </div>
-    <?php include 'footer.php';?>
 
     <script>
-        function Like(id){
-            const like = document.getElementById("toggle-like");
-            like.classList.toggle("like-liked");
-        }
-
+        // $(function () {
+        //     $("#repotable").DataTable({
+        //     "responsive": true, "lengthChange": false, "autoWidth": false,
+        //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        // });
         $(document).ready(function() {
             // Add an input event listener to the search input field
             $('#searchFile').on('input', function() {

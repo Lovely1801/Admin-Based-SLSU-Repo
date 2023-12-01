@@ -16,7 +16,7 @@
     }
 </style>
 
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: linear-gradient(286deg, #b2b7e4, #f0cfcf);">
     <ul class="nav flex-column">
         <li class="nav-item">
             <a class="nav-link selected" href="dashboard.php">Dashboard</a>

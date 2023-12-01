@@ -12,7 +12,7 @@ session_start();
     <style>
         .table-responsive {
             overflow: auto;
-            max-height: 300px; /* Adjust the maximum height as needed */
+            max-height: 400px; /* Adjust the maximum height as needed */
         }
     </style>
 </head>
@@ -22,7 +22,7 @@ session_start();
         <div>
             <div class="container mt-5">
                 <h2>User | Logs</h2>
-                <div class="table-responsive rounded" height='400px'>
+                <div class="table-responsive rounded">
                     <table class='table table-bordered'>
                         <thead>
                             <tr>
